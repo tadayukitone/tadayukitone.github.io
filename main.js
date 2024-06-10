@@ -1,3 +1,4 @@
+/*
 import * as THREE from 'three';
 
 // シーンを作成
@@ -29,3 +30,4 @@ function animate() {
     renderer.render(scene, camera);
 }
 animate();
+*/
