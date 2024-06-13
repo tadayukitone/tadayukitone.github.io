@@ -5,39 +5,3 @@ title: Home
 
 <h1>Welcome to My Personal Page</h1>
 <p>This page is about my hobbies and knowledge sharing.</p>
-
-<!-- ランダムなarXiv論文へのリンクボタン -->
-<button id="randomArxivButton">Get a Random arXiv Paper</button>
-
-<script>
-    // ランダムなarXiv論文を取得する関数
-    async function getRandomArxivPaper() {
-        try {
-            // arXiv APIを使って論文リストを取得
-            const response = await fetch('http://export.arxiv.org/api/query?search_query=all&start=0&max_results=100');
-            const data = await response.text();
-
-            // XMLパース
-            const parser = new DOMParser();
-            const xmlDoc = parser.parseFromString(data, "text/xml");
-
-            // entry要素を取得
-            const entries = xmlDoc.getElementsByTagName('entry');
-
-            // ランダムに1つ選択
-            const randomIndex = Math.floor(Math.random() * entries.length);
-            const randomEntry = entries[randomIndex];
-
-            // 論文のリンクを取得
-            const link = randomEntry.getElementsByTagName('id')[0].textContent;
-
-            // ランダムな論文にリダイレクト
-            window.location.href = link;
-        } catch (error) {
-            console.error('Error fetching arXiv paper:', error);
-        }
-    }
-
-    // ボタンクリックイベント
-    document.getElementById('randomArxivButton').addEventListener('click', getRandomArxivPaper);
-</script>
