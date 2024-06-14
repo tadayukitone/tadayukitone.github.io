@@ -3,5 +3,30 @@ layout: default
 title: Home
 ---
 
-<h1>Welcome to My Personal Page</h1>
-<p>This page is about my hobbies and knowledge sharing.</p>
+<div class="jumbotron bg-light text-dark">
+    <h1 class="display-4">Welcome to My Personal Page</h1>
+    <p class="lead">Exploring the world of technology and innovation.</p>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card my-3">
+                <div class="card-body">
+                    <h5 class="card-title">Projects</h5>
+                    <p class="card-text">Discover the latest projects and innovations I am working on.</p>
+                    <a href="{{ "/projects" | relative_url }}" class="btn btn-primary">Learn More</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card my-3">
+                <div class="card-body">
+                    <h5 class="card-title">Research</h5>
+                    <p class="card-text">Explore my research in various fields of science and technology.</p>
+                    <a href="{{ "/projects" | relative_url }}" class="btn btn-primary">Learn More</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

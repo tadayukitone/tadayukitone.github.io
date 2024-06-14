@@ -4,22 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ page.title }}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ "/assets/css/style.css" | relative_url }}">
 </head>
 <body>
-    <header>
-        <nav>
-            <ul>
-                <li><a href="{{ "/" | relative_url }}">Home</a></li>
-                <li><a href="{{ "/about" | relative_url }}">About</a></li>
-                <li><a href="{{ "/projects" | relative_url }}">Projects</a></li>
-                <li><a href="{{ "/contact" | relative_url }}">Contact</a></li>
-            </ul>
+    <header class="bg-dark text-white py-3">
+        <nav class="container d-flex justify-content-between">
+            <a href="{{ "/" | relative_url }}" class="text-white">Home</a>
+            <a href="{{ "/about" | relative_url }}" class="text-white">About</a>
+            <a href="{{ "/projects" | relative_url }}" class="text-white">Projects</a>
+            <a href="{{ "/contact" | relative_url }}" class="text-white">Contact</a>
         </nav>
     </header>
 
-    <main>
+    <main class="container my-5">
         {{ content }}
     </main>
+
+    <footer class="bg-dark text-white text-center py-3">
+        &copy; 2024 Your Name. All rights reserved.
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

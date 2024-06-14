@@ -1,13 +1,36 @@
-/* Example custom CSS */
 body {
-    font-family: 'Arial', sans-serif;
-    line-height: 1.6;
+    background-color: #f8f9fa;
+    color: #343a40;
+    font-family: 'Roboto', sans-serif;
 }
 
-h1 {
-    color: #333;
+header {
+    background-color: #343a40;
 }
 
-p {
-    color: #666;
+footer {
+    background-color: #343a40;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #007bff;
+}
+
+a {
+    color: #007bff;
+}
+
+a:hover {
+    color: #0056b3;
+    text-decoration: none;
+}
+
+.card {
+    background-color: #ffffff;
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-title {
+    color: #007bff;
 }
