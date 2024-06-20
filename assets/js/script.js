@@ -3,7 +3,7 @@ const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-const stars = [];
+let stars = [];
 const numStars = 100;
 const G = 0.1; // 重力定数
 
