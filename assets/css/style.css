@@ -1,6 +1,6 @@
 /* 既存のスタイル */
 body {
-    background-color: #f8f9fa;
+    background-color: black;  /* 背景を黒に変更 */
     color: #343a40;
     font-family: 'Roboto', sans-serif;
 }
