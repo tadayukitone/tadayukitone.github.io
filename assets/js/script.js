@@ -6,9 +6,11 @@ canvas.height = window.innerHeight;
 let stars = [];
 const numStars = 100;
 const G = 0.1; // 重力定数
+const splitProbability = 0.05; // 分裂の確率
+const maxStarSize = 10; // 恒星になるサイズの閾値
 
-function createStar(x, y, size, mass, vx, vy) {
-    return { x, y, size, mass, vx, vy };
+function createStar(x, y, size, mass, vx, vy, color = 'white', isFixed = false) {
+    return { x, y, size, mass, vx, vy, color, isFixed };
 }
 
 for (let i = 0; i < numStars; i++) {
@@ -22,19 +24,43 @@ for (let i = 0; i < numStars; i++) {
 }
 
 function update() {
-    for (let star of stars) {
-        for (let otherStar of stars) {
-            if (star !== otherStar) {
+    for (let i = 0; i < stars.length; i++) {
+        let star = stars[i];
+        if (star.size >= maxStarSize) {
+            star.vx = 0;
+            star.vy = 0;
+            star.color = 'yellow';
+            star.isFixed = true;
+        } else {
+            for (let j = i + 1; j < stars.length; j++) {
+                let otherStar = stars[j];
                 const dx = otherStar.x - star.x;
                 const dy = otherStar.y - star.y;
                 const distance = Math.sqrt(dx * dx + dy * dy);
 
                 if (distance < star.size + otherStar.size) {
-                    // 衝突: 大きさを合成し、位置を更新
-                    star.size += otherStar.size * 0.1;
-                    otherStar.size = 0;
+                    if (Math.random() < splitProbability) {
+                        // 分裂: 星を小さくし、新しい星を追加
+                        const splitSize = star.size / 2;
+                        star.size = splitSize;
+                        star.mass = splitSize * 0.5;
+                        stars.push(createStar(star.x, star.y, splitSize, splitSize * 0.5, -star.vx, -star.vy));
+                    } else {
+                        // 合体: 大きさと質量を合成
+                        const newSize = Math.sqrt(star.size * star.size + otherStar.size * otherStar.size);
+                        const newMass = star.mass + otherStar.mass;
+                        const newVx = (star.vx * star.mass + otherStar.vx * otherStar.mass) / newMass;
+                        const newVy = (star.vy * star.mass + otherStar.vy * otherStar.mass) / newMass;
+
+                        star.size = newSize;
+                        star.mass = newMass;
+                        star.vx = newVx;
+                        star.vy = newVy;
+
+                        stars.splice(j, 1);
+                        j--;
+                    }
                 } else {
-                    // 重力による引力
                     const force = (G * star.mass * otherStar.mass) / (distance * distance);
                     const ax = (force * dx) / distance;
                     const ay = (force * dy) / distance;
@@ -46,17 +72,16 @@ function update() {
     }
 
     for (let star of stars) {
-        star.x += star.vx;
-        star.y += star.vy;
+        if (!star.isFixed) {
+            star.x += star.vx;
+            star.y += star.vy;
 
-        // 画面外に出たら反対側に再配置
-        if (star.x > canvas.width) star.x = 0;
-        if (star.y > canvas.height) star.y = 0;
-        if (star.x < 0) star.x = canvas.width;
-        if (star.y < 0) star.y = canvas.height;
+            if (star.x > canvas.width) star.x = 0;
+            if (star.y > canvas.height) star.y = 0;
+            if (star.x < 0) star.x = canvas.width;
+            if (star.y < 0) star.y = canvas.height;
+        }
     }
-
-    stars = stars.filter(star => star.size > 0); // サイズが0の星を除外
 }
 
 function draw() {
@@ -64,7 +89,7 @@ function draw() {
     for (let star of stars) {
         ctx.beginPath();
         ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-        ctx.fillStyle = 'white';
+        ctx.fillStyle = star.color;
         ctx.fill();
     }
 }
