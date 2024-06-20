@@ -64,8 +64,14 @@ function update() {
                     const force = (G * star.mass * otherStar.mass) / (distance * distance);
                     const ax = (force * dx) / distance;
                     const ay = (force * dy) / distance;
-                    star.vx += ax / star.mass;
-                    star.vy += ay / star.mass;
+                    if (!star.isFixed) {
+                        star.vx += ax / star.mass;
+                        star.vy += ay / star.mass;
+                    }
+                    if (!otherStar.isFixed) {
+                        otherStar.vx -= ax / otherStar.mass;
+                        otherStar.vy -= ay / otherStar.mass;
+                    }
                 }
             }
         }
