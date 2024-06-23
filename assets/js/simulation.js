@@ -5,10 +5,10 @@ canvas.height = 500;
 
 const particles = [];
 const numParticles = 200;
-const magneticField = { x: canvas.width / 2, y: canvas.height / 2, strength: 10000 };
+let magneticField = { x: canvas.width / 2, y: canvas.height / 2, strength: 10000 };
 
 function createParticle(x, y, vx, vy, radius, color) {
-    return { x, y, vx, vy, radius, color };
+    return { x, y, vx, vy, radius, color, mass: radius * radius };
 }
 
 for (let i = 0; i < numParticles; i++) {
@@ -21,6 +21,15 @@ for (let i = 0; i < numParticles; i++) {
         'white'
     ));
 }
+
+canvas.addEventListener('click', function(event) {
+    const rect = canvas.getBoundingClientRect();
+    magneticField = {
+        x: event.clientX - rect.left,
+        y: event.clientY - rect.top,
+        strength: 10000
+    };
+});
 
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -41,8 +50,8 @@ function update() {
         const ax = (force * dx) / distance;
         const ay = (force * dy) / distance;
 
-        p.vx += ax;
-        p.vy += ay;
+        p.vx += ax / p.mass;
+        p.vy += ay / p.mass;
         p.x += p.vx;
         p.y += p.vy;
 
