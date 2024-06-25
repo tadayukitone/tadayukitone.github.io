@@ -3,14 +3,32 @@ document.addEventListener('DOMContentLoaded', () => {
     const ctx = canvas.getContext('2d');
     const startButton = document.getElementById('startButton');
 
-    const expertPath = [
-        { x: 50, y: 50 }, { x: 100, y: 100 }, { x: 150, y: 50 }, { x: 200, y: 100 },
-        { x: 250, y: 50 }, { x: 300, y: 100 }, { x: 350, y: 50 }, { x: 400, y: 100 }
-    ];
+    let isDrawing = false;
+    const expertPath = [];
     const agentPath = [];
-
     let imitationLearning = false;
     let currentStep = 0;
+
+    canvas.addEventListener('mousedown', (e) => {
+        isDrawing = true;
+        expertPath.length = 0; // Clear previous path
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const rect = canvas.getBoundingClientRect();
+        expertPath.push({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+    });
+
+    canvas.addEventListener('mousemove', (e) => {
+        if (isDrawing) {
+            const rect = canvas.getBoundingClientRect();
+            const point = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+            expertPath.push(point);
+            drawPath(expertPath, 'blue');
+        }
+    });
+
+    canvas.addEventListener('mouseup', () => {
+        isDrawing = false;
+    });
 
     startButton.addEventListener('click', () => {
         imitationLearning = true;
@@ -23,6 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function drawPath(path, color) {
         ctx.strokeStyle = color;
+        ctx.lineWidth = 2;
         ctx.beginPath();
         ctx.moveTo(path[0].x, path[0].y);
         for (const point of path) {
@@ -39,6 +58,8 @@ document.addEventListener('DOMContentLoaded', () => {
             drawPath(agentPath, 'red');
             currentStep++;
             requestAnimationFrame(update);
+        } else {
+            imitationLearning = false;
         }
     }
 });
