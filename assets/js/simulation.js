@@ -1,75 +1,75 @@
-const canvas = document.getElementById('simulationCanvas');
-const ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth;
-canvas.height = 500;
+document.addEventListener('DOMContentLoaded', () => {
+    const canvas = document.getElementById('demoCanvas');
+    const ctx = canvas.getContext('2d');
+    const startButton = document.getElementById('startButton');
+    const parametersDiv = document.getElementById('parameters');
 
-const numParticles = 300;
-const particles = [];
-const magneticField = { x: canvas.width / 2, y: canvas.height / 2, strength: 10000 };
+    let isDrawing = false;
+    const expertPath = [];
+    const agentPath = [];
+    let imitationLearning = false;
+    let currentStep = 0;
+    let agentParameters = { learningRate: 0.1 };
 
-function createParticle(x, y, vx, vy, radius) {
-    return { x, y, vx, vy, radius, mass: radius * radius };
-}
+    canvas.addEventListener('mousedown', (e) => {
+        isDrawing = true;
+        expertPath.length = 0; // Clear previous path
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const rect = canvas.getBoundingClientRect();
+        expertPath.push({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+    });
 
-for (let i = 0; i < numParticles; i++) {
-    const radius = Math.random() * 2 + 1;
-    particles.push(createParticle(
-        Math.random() * canvas.width,
-        canvas.height - radius,  // Start particles at the bottom
-        0,
-        0,
-        radius
-    ));
-}
-
-canvas.addEventListener('click', function(event) {
-    const rect = canvas.getBoundingClientRect();
-    magneticField.x = event.clientX - rect.left;
-    magneticField.y = event.clientY - rect.top;
-});
-
-function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    for (const p of particles) {
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fillStyle = 'white';
-        ctx.fill();
-    }
-}
-
-function update() {
-    for (const p of particles) {
-        const dx = magneticField.x - p.x;
-        const dy = magneticField.y - p.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-
-        if (distance > p.radius) {
-            const force = magneticField.strength / (distance * distance);
-            const ax = (force * dx) / distance;
-            const ay = (force * dy) / distance - 0.1;  // Adding gravity effect
-
-            p.vx += ax / p.mass;
-            p.vy += ay / p.mass;
+    canvas.addEventListener('mousemove', (e) => {
+        if (isDrawing) {
+            const rect = canvas.getBoundingClientRect();
+            const point = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+            expertPath.push(point);
+            drawPath(expertPath, 'blue');
         }
+    });
 
-        p.vx *= 0.95;  // Damping to stabilize
-        p.vy *= 0.95;  // Damping to stabilize
+    canvas.addEventListener('mouseup', () => {
+        isDrawing = false;
+    });
 
-        p.x += p.vx;
-        p.y += p.vy;
+    startButton.addEventListener('click', () => {
+        imitationLearning = true;
+        currentStep = 0;
+        agentPath.length = 0; // Clear previous agent path
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawPath(expertPath, 'blue');
+        displayParameters();
+        requestAnimationFrame(update);
+    });
 
-        if (p.x > canvas.width) p.x = canvas.width;
-        if (p.x < 0) p.x = 0;
-        if (p.y > canvas.height) p.y = canvas.height;
-        if (p.y < 0) p.y = 0;
+    function drawPath(path, color) {
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(path[0].x, path[0].y);
+        for (const point of path) {
+            ctx.lineTo(point.x, point.y);
+        }
+        ctx.stroke();
     }
-}
 
-function animate() {
-    update();
-    draw();
-    requestAnimationFrame(animate);
-}
+    function update() {
+        if (imitationLearning && currentStep < expertPath.length) {
+            agentPath.push(expertPath[currentStep]);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawPath(expertPath, 'blue');
+            drawPath(agentPath, 'red');
+            currentStep++;
+            requestAnimationFrame(update);
+        } else {
+            imitationLearning = false;
+        }
+    }
 
-animate();
+    function displayParameters() {
+        parametersDiv.innerHTML = `
+            <p><strong>Agent Parameters:</strong></p>
+            <p>Learning Rate: ${agentParameters.learningRate}</p>
+        `;
+    }
+});

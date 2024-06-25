@@ -5,6 +5,9 @@ title: Imitation Learning Simulation
 
 <h1>Imitation Learning Simulation</h1>
 <p>Click and drag on the canvas to draw a path. Then click the "Start Imitation Learning" button to see the agent follow the path you drew.</p>
+<p><strong>Imitation Learning:</strong> Imitation Learning is a type of machine learning where an agent learns to perform a task by mimicking the behavior of an expert. The agent observes the actions of the expert and tries to replicate them. In this demonstration, you act as the expert by drawing a path, and the agent will try to follow this path.</p>
+<p><strong>Principle and Equations:</strong> The agent is trained using the collected expert path data, trying to minimize the difference between its actions and the expert's actions. The optimization objective is to minimize the mean squared error between the expert's actions and the agent's predicted actions.</p>
 <canvas id="demoCanvas" width="500" height="200"></canvas>
 <button id="startButton">Start Imitation Learning</button>
+<div id="parameters"></div>
 <script src="assets/js/imitation_learning.js"></script>
