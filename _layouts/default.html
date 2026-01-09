@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ "/assets/css/style.css" | relative_url }}">
 </head>
-<body>
+<body class="page-{{ page.title | downcase | replace: ' ', '-' }}">
     <header class="bg-dark text-white py-3">
         <nav class="container d-flex justify-content-between">
             <a href="{{ "/" | relative_url }}" class="text-white">Home</a>

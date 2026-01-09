@@ -5,6 +5,7 @@ canvas.height = window.innerHeight;
 
 let stars = [];
 const numStars = 100;
+const maxStars = 300;
 const G = 0.1; // 重力定数
 const splitProbability = 0.05; // 分裂の確率
 const maxStarSize = 10; // 恒星になるサイズの閾値
@@ -44,7 +45,9 @@ function update() {
                         const splitSize = star.size / 2;
                         star.size = splitSize;
                         star.mass = splitSize * 0.5;
-                        stars.push(createStar(star.x, star.y, splitSize, splitSize * 0.5, -star.vx, -star.vy));
+                        if (stars.length < maxStars) {
+                            stars.push(createStar(star.x, star.y, splitSize, splitSize * 0.5, -star.vx, -star.vy));
+                        }
                     } else {
                         // 合体: 大きさと質量を合成
                         const newSize = Math.sqrt(star.size * star.size + otherStar.size * otherStar.size);
@@ -105,5 +108,12 @@ function animate() {
     draw();
     requestAnimationFrame(animate);
 }
+
+function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+
+window.addEventListener('resize', resizeCanvas);
 
 animate();
