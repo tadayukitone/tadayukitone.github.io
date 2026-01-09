@@ -36,7 +36,7 @@ a:hover {
 }
 
 /* 新しいスタイル */
-body {
+body.page-home {
     overflow: hidden;
 }
 
